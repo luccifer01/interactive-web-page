@@ -1,0 +1,93 @@
+/* Reset Styles */
+body, ul {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Navbar Styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Scroll Effect */
+.navbar.scrolled {
+    background: rgba(0, 0, 0, 0.85);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-links li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+/* Hover Effect */
+.nav-links a:hover {
+    background: white;
+    color: black;
+    transform: scale(1.1);
+}
+
+/* Sections Styling */
+section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    transition: background 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Background Images */
+#home {
+    background-image: url('https://source.unsplash.com/1600x900/?nature,landscape');
+}
+
+#about {
+    background-image: url('https://source.unsplash.com/1600x900/?city,buildings');
+}
+
+#services {
+    background-image: url('https://source.unsplash.com/1600x900/?technology,code');
+}
+
+#contact {
+    background-image: url('https://source.unsplash.com/1600x900/?contact,communication');
+}
+
+/* Content Box */
+.content {
+    max-width: 600px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}

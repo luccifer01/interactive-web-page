@@ -3,50 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Navigation Menu</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <title>To-Do List App</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        button {
+            background: #ff6f61;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #ff3b30;
+        }
+
+        .task-list {
+            list-style: none;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            transition: 0.3s;
+            color: white;
+        }
+
+        .task-item.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .actions button {
+            padding: 5px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .edit {
+            background: #ffc107;
+            color: black;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>To-Do List ✅</h1>
+        <input type="text" id="taskInput" placeholder="Enter task">
+        <input type="datetime-local" id="dueDate">
+        <button onclick="addTask()">➕ Add Task</button>
+        <ul class="task-list" id="taskList"></ul>
+    </div>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <script>
+        let tasks = [];
 
-    <!-- Sections -->
-    <section id="home">
-        <div class="content">
-            <h1>Welcome to Our Website</h1>
-            <p>Explore our services and get to know more about us.</p>
-        </div>
-    </section>
+        function addTask() {
+            let taskInput = document.getElementById("taskInput");
+            let dueDate = document.getElementById("dueDate");
 
-    <section id="about">
-        <div class="content">
-            <h1>About Us</h1>
-            <p>We are a team of passionate individuals dedicated to providing high-quality services to our clients.</p>
-        </div>
-    </section>
+            if (taskInput.value.trim() === "") {
+                alert("Please enter a task!");
+                return;
+            }
 
-    <section id="services">
-        <div class="content">
-            <h1>Our Services</h1>
-            <p>From web development to digital marketing, we offer a wide range of services to meet your needs.</p>
-        </div>
-    </section>
+            let task = {
+                id: Date.now(),
+                text: taskInput.value,
+                dueDate: dueDate.value,
+                completed: false
+            };
 
-    <section id="contact">
-        <div class="content">
-            <h1>Contact Us</h1>
-            <p>Get in touch with us for more information or any inquiries.</p>
-        </div>
-    </section>
+            tasks.push(task);
+            tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            taskInput.value = "";
+            dueDate.value = "";
+            renderTasks();
+        }
 
+        function renderTasks() {
+            let taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+
+            tasks.forEach(task => {
+                let li = document.createElement("li");
+                li.classList.add("task-item");
+                if (task.completed) li.classList.add("completed");
+
+                let taskText = document.createElement("span");
+                taskText.innerText = `${task.text} (Due: ${task.dueDate || "No Date"})`;
+
+                let actions = document.createElement("div");
+                actions.classList.add("actions");
+
+                let completeBtn = document.createElement("button");
+                completeBtn.innerText = "✔";
+                completeBtn.onclick = () => toggleComplete(task.id);
+
+                let editBtn = document.createElement("button");
+                editBtn.innerText = "✏";
+                editBtn.classList.add("edit");
+                editBtn.onclick = () => editTask(task.id);
+
+                let deleteBtn = document.createElement("button");
+                deleteBtn.innerText = "🗑";
+                deleteBtn.classList.add("delete");
+                deleteBtn.onclick = () => deleteTask(task.id);
+
+                actions.appendChild(completeBtn);
+                actions.appendChild(editBtn);
+                actions.appendChild(deleteBtn);
+
+                li.appendChild(taskText);
+                li.appendChild(actions);
+                taskList.appendChild(li);
+            });
+        }
+
+        function toggleComplete(id) {
+            tasks = tasks.map(task => task.id === id ? { ...task, completed: !task.completed } : task);
+            renderTasks();
+        }
+
+        function editTask(id) {
+            let task = tasks.find(task => task.id === id);
+            let newText = prompt("Edit task:", task.text);
+            let newDate = prompt("Edit due date (YYYY-MM-DD HH:MM):", task.dueDate);
+
+            if (newText !== null) task.text = newText;
+            if (newDate !== null) task.dueDate = newDate;
+
+            tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(task => task.id !== id);
+            renderTasks();
+        }
+    </script>
 </body>
 </html>
+
